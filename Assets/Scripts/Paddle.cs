@@ -71,7 +71,7 @@ public class Paddle : MonoBehaviour
         float newXPosition = moveInput * this.speed * Time.deltaTime + currentXPosition;
 
         // Acotamos el valor para no exceder los límites
-        newXPosition = Mathf.Clamp(currentXPosition, this.paddleLeftLimit, this.paddleRightLimit);
+        newXPosition = Mathf.Clamp(newXPosition, this.paddleLeftLimit, this.paddleRightLimit);
 
         // Establecemos la nueva posición a la pala
         Vector3 newPosition = new Vector3(newXPosition, this.transform.position.y, this.transform.position.z);
