@@ -40,6 +40,29 @@ public class Ball : MonoBehaviour
         {
             objectDamagable.TakeDamage();
         }
+
+        // Si el objeto es la pala
+        var objectPaddle = collision.gameObject.GetComponent<Paddle>();
+        if (objectPaddle != null)
+        {
+            Vector3 paddlePosition = collision.transform.position;
+            float paddleWidth = collision.collider.bounds.size.x;
+
+            // Calcula el porcentaje de impacto de la bola en la pala (0 a 1)
+            float hitPercent = (transform.position.x - paddlePosition.x) / paddleWidth + 0.5f;
+            hitPercent = Mathf.Clamp01(hitPercent); // Limita el porcentaje entre 0 y 1
+
+            // Mapea el porcentaje al rango de ángulos (45 a 135 grados)
+            float minAngle = 45f;
+            float maxAngle = 135f;
+            float bounceAngle = Mathf.Lerp(maxAngle, minAngle, hitPercent);
+
+            // Calcula la nueva dirección de la bola
+            Vector2 newDirection = Quaternion.Euler(0, 0, bounceAngle) * Vector2.right;
+
+            // Ajusta la velocidad manteniendo la dirección
+            this.rigidbody2D.velocity = newDirection.normalized * this.launchSpeed;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -62,7 +85,7 @@ public class Ball : MonoBehaviour
             float randomDirection = Random.Range(-1f, 1f);
 
             // Calculamos la dirección de lanzamiento de la bola
-            Vector3 launchDirection = new Vector3(randomDirection, 1, 0).normalized;
+            Vector3 launchDirection = new Vector3(0.8f, 1, 0).normalized;
 
             // Aplicamos una velocidad a la bola en la dirección calculada
             this.rigidbody2D.velocity = launchDirection * launchSpeed;
