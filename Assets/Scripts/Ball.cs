@@ -28,6 +28,25 @@ public class Ball : MonoBehaviour
     void Update()
     {
         LaunchBall();
+
+        CheckAndCorrectHorizontalMovement();
+    }
+
+    private void CheckAndCorrectHorizontalMovement()
+    {
+        // Si la pelota no está lanzada
+        if (!this.isLaunched)
+            return;
+
+        // Si la velocidad en Y es casi 0, la pelota se mueve casi horizontalmente
+        if (Mathf.Abs(this.rigidbody2D.velocity.y) < 0.5f)
+        {
+            // Generar un nuevo ángulo aleatorio para la dirección
+            float randomDirectionY = Random.Range(0.5f, 1f) * Mathf.Sign(this.rigidbody2D.velocity.y);
+
+            // Aplicar la nueva dirección manteniendo la magnitud de la velocidad actual
+            this.rigidbody2D.velocity = new Vector2(this.rigidbody2D.velocity.x, randomDirectionY).normalized * this.rigidbody2D.velocity.magnitude;
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -67,6 +86,7 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        GameManagerSingleton.Instance.SubstractLive();
         this.ResetBallPosition();
     }
 
