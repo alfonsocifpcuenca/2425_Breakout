@@ -6,11 +6,12 @@ TagManager:
   tags:
   - Paddle
   - Block
+  - Ball
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Balls
   - Water
   - UI
   - 

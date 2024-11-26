@@ -3,26 +3,33 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Ball : MonoBehaviour
 {
-    [SerializeField]
-    private float launchSpeed = 10f;
-    private bool isLaunched = false;
     private Rigidbody2D rigidbody2D;
 
     [SerializeField]
-    private Transform paddle;
+    private GameObject startMessage;
+
+    private GameObject paddleGameObject;
 
     // Posición de la bola respecto de la pala
     private Vector2 initialPosition = new Vector2(0.35f, 1.25f);
 
     private void Awake()
     {
+        this.paddleGameObject = GameObject.FindGameObjectWithTag("Paddle");
+        if (this.paddleGameObject == null)
+        {
+            Debug.LogError("No se ha encontrado el objeto con el tag 'Paddle'");
+            this.gameObject.SetActive(false);
+        }
+
         // Obtenemos el componente Rigidbody2D
         this.rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     private void Start()
     {
-        ResetBallPosition();
+        if (GameManagerSingleton.Instance.BallStatus == BallStatus.WaitingToLaunch)
+            ResetBallPosition();
     }
 
     void Update()
@@ -35,7 +42,7 @@ public class Ball : MonoBehaviour
     private void CheckAndCorrectHorizontalMovement()
     {
         // Si la pelota no está lanzada
-        if (!this.isLaunched)
+        if (GameManagerSingleton.Instance.GameStatus != GameStatus.Playing)
             return;
 
         // Si la velocidad en Y es casi 0, la pelota se mueve casi horizontalmente
@@ -80,35 +87,48 @@ public class Ball : MonoBehaviour
             Vector2 newDirection = Quaternion.Euler(0, 0, bounceAngle) * Vector2.right;
 
             // Ajusta la velocidad manteniendo la dirección
-            this.rigidbody2D.velocity = newDirection.normalized * this.launchSpeed;
+            this.rigidbody2D.velocity = newDirection.normalized * GameManagerSingleton.Instance.BallVelocity;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameManagerSingleton.Instance.SubstractLive();
-        this.ResetBallPosition();
+        if (GameManagerSingleton.Instance.NumbersOfBalls > 1)
+        {
+            GameManagerSingleton.Instance.SubstractBall();
+            Destroy(this.gameObject);
+        } 
+        else 
+        { 
+            GameManagerSingleton.Instance.SubstractLive();
+            GameManagerSingleton.Instance.GameStatus = GameStatus.Stop;
+            GameManagerSingleton.Instance.BallStatus = BallStatus.WaitingToLaunch;
+            this.ResetBallPosition();
+        }
     }
 
     private void LaunchBall()
     {
         // Si pulsamos la tecla Space y la pelota no ha sido lanzada la lanzamos
-        if (Input.GetKeyDown(KeyCode.Space) && !this.isLaunched)
+        if (Input.GetKeyDown(KeyCode.Space) && GameManagerSingleton.Instance.BallStatus == BallStatus.WaitingToLaunch)
         {
-            // Establecemos la pelota como lanzada
-            this.isLaunched = true;
+            // Establecemos el estado de la pelota como 'Playing'
+            GameManagerSingleton.Instance.BallStatus = BallStatus.Playing;
 
             // Sacamos a la pelota de la pala
             this.transform.parent = null;
-
-            // Establecemos una dirección aleatoria de lanzamiento
-            float randomDirection = Random.Range(-1f, 1f);
 
             // Calculamos la dirección de lanzamiento de la bola
             Vector3 launchDirection = new Vector3(0.8f, 1, 0).normalized;
 
             // Aplicamos una velocidad a la bola en la dirección calculada
-            this.rigidbody2D.velocity = launchDirection * launchSpeed;
+            this.rigidbody2D.velocity = launchDirection * GameManagerSingleton.Instance.BallVelocity;
+
+            // Ocultamos el mensaje de ayuda para iniciar la partida
+            this.startMessage?.SetActive(false);
+
+            // Contamos los bloques restantes
+            GameManagerSingleton.Instance.CountBlocks();
         }
     }
 
@@ -117,9 +137,22 @@ public class Ball : MonoBehaviour
     /// </summary>
     private void ResetBallPosition()
     {
-        this.isLaunched = false;
-        this.transform.parent = this.paddle;
+        // Quitamos la velocidad de la bola
         this.rigidbody2D.velocity = Vector2.zero;
+
+        // Reestablecemos el tamaño de la pala
+        this.paddleGameObject.transform.localScale = this.paddleGameObject.GetComponent<Paddle>().OriginalScale;
+
+        // Calculamos nuevamente los límites
+        this.paddleGameObject.GetComponent<Paddle>()?.CalculatePaddleLimits();
+
+        // Establecemos la bola como hijo de la pala
+        this.transform.parent = this.paddleGameObject.transform;
+
+        // Situamos la bola en la posición incial
         this.transform.localPosition = initialPosition;
+        
+        // Mostramos el mensaje de tutorial
+        this.startMessage?.SetActive(true);
     }
 }
