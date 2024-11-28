@@ -14,6 +14,7 @@ public class Paddle : MonoBehaviour
 
     private void Awake()
     {
+        GameManagerSingleton.Instance.LoadLevel();
         this.CalculatePaddleLimits();
         this.OriginalScale = transform.localScale;
     }

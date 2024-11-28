@@ -126,16 +126,13 @@ public class Ball : MonoBehaviour
 
             // Ocultamos el mensaje de ayuda para iniciar la partida
             this.startMessage?.SetActive(false);
-
-            // Contamos los bloques restantes
-            GameManagerSingleton.Instance.CountBlocks();
         }
     }
 
     /// <summary>
     /// Establece la posición y estados iniciales de la pelota
     /// </summary>
-    private void ResetBallPosition()
+    public void ResetBallPosition()
     {
         // Quitamos la velocidad de la bola
         this.rigidbody2D.velocity = Vector2.zero;

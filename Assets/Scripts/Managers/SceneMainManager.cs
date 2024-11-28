@@ -15,7 +15,7 @@ public class SceneMainManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             locked = true;
-            GameManagerSingleton.Instance.BallVelocity = 6f;
+            GameManagerSingleton.Instance.BallVelocity = 4f;
             GameManagerSingleton.Instance.Lives = 5;
             GameManagerSingleton.Instance.GameStatus = GameStatus.Playing;
             SceneManager.LoadScene("SceneOne");

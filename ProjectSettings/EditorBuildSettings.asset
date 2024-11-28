@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneOne.unity
     guid: e00a194496fe3414aa5cd24b85afa569
+  - enabled: 1
+    path: Assets/Scenes/SeceneWin.unity
+    guid: cb72fb45ee464f549b3e42751e21176c
   m_configObjects: {}
