@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UILifes : MonoBehaviour
+public class UILives : MonoBehaviour
 {
     private Text text;
     

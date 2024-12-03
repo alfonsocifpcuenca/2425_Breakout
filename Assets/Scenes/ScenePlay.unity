@@ -747,7 +747,7 @@ GameObject:
   - component: {fileID: 950515085}
   - component: {fileID: 950515084}
   m_Layer: 5
-  m_Name: Lifes
+  m_Name: Lives
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
