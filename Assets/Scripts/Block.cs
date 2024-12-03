@@ -67,7 +67,6 @@ public class Block : MonoBehaviour, IDamagable
             if (this.powerUp != null)
                 this.powerUp.Execute();
             
-            this.gameObject.SetActive(false);
             Destroy(gameObject);
             GameManagerSingleton.Instance.LevelManager.SubstractBlock();
         }

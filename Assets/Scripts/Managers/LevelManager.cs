@@ -55,10 +55,10 @@ public class LevelManager
         string jsonData = jsonFile.text;
 
         // Parseamos el JSON
-        Level leveData = JsonUtility.FromJson<Level>(jsonData);
+        Level levelData = JsonUtility.FromJson<Level>(jsonData);
 
         // Montamos el nivel
-        this.CreateLevel(leveData);
+        this.CreateLevel(levelData);
     }
 
     private void ClearLevel(GameObject blockContainer)

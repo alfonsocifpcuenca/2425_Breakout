@@ -122,6 +122,7 @@ public class Ball : MonoBehaviour
         {
             // Establecemos el estado de la pelota como 'Playing'
             GameManagerSingleton.Instance.BallStatus = BallStatus.Playing;
+            GameManagerSingleton.Instance.GameStatus = GameStatus.Playing;
 
             // Sacamos a la pelota de la pala
             this.transform.parent = null;
