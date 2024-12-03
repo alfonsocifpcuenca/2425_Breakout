@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneWinManager : MonoBehaviour
+public class SceneGameOver : MonoBehaviour
 {
 
     bool locked = false;

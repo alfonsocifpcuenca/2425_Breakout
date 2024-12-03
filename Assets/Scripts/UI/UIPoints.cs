@@ -13,6 +13,6 @@ public class UIPoints : MonoBehaviour
     private void LateUpdate()
     {
         if (this.text != null)
-            this.text.text = $"PUNTOS {GameManagerSingleton.Instance.Points.ToString("N0")}";
+            this.text.text = $"PUNTOS {GameManagerSingleton.Instance.Player.Points.ToString("N0")}";
     }
 }

@@ -13,6 +13,6 @@ public class UIBalls : MonoBehaviour
     private void LateUpdate()
     {
         if (this.text != null)
-            this.text.text = $"BOLAS {GameManagerSingleton.Instance.NumbersOfBalls.ToString("00")}";
+            this.text.text = $"BOLAS {GameManagerSingleton.Instance.BallManager.Balls.Count.ToString("00")}";
     }
 }

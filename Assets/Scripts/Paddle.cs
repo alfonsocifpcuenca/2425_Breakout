@@ -14,7 +14,7 @@ public class Paddle : MonoBehaviour
 
     private void Awake()
     {
-        GameManagerSingleton.Instance.LoadLevel();
+        GameManagerSingleton.Instance.LevelManager.LoadLevel();
         this.CalculatePaddleLimits();
         this.OriginalScale = transform.localScale;
     }
@@ -68,7 +68,7 @@ public class Paddle : MonoBehaviour
         float currentXPosition = this.transform.position.x;
         
         // Calculamos la nueva posicion de la pala
-        float newXPosition = moveInput * GameManagerSingleton.Instance.BallVelocity * Time.deltaTime + currentXPosition;
+        float newXPosition = moveInput * GameManagerSingleton.Instance.BallManager.BallVelocity * Time.deltaTime + currentXPosition;
 
         // Acotamos el valor para no exceder los límites
         newXPosition = Mathf.Clamp(newXPosition, this.paddleLeftLimit, this.paddleRightLimit);

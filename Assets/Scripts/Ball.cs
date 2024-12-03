@@ -15,6 +15,13 @@ public class Ball : MonoBehaviour
 
     private void Awake()
     {
+        // Añadimos la bola al BallManager
+        if (!GameManagerSingleton.Instance.BallManager.AddBall(this.gameObject))
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+
         this.paddleGameObject = GameObject.FindGameObjectWithTag("Paddle");
         if (this.paddleGameObject == null)
         {
@@ -49,7 +56,7 @@ public class Ball : MonoBehaviour
         if (Mathf.Abs(this.rigidbody2D.velocity.y) < 0.5f)
         {
             // Generar un nuevo ángulo aleatorio para la dirección
-            float randomDirectionY = Random.Range(0.5f, 1f) * Mathf.Sign(this.rigidbody2D.velocity.y);
+            float randomDirectionY = Random.Range(0.5f, 1f) * Mathf.Sign(this.rigidbody2D.velocity.y) * (-1);
 
             // Aplicar la nueva dirección manteniendo la magnitud de la velocidad actual
             this.rigidbody2D.velocity = new Vector2(this.rigidbody2D.velocity.x, randomDirectionY).normalized * this.rigidbody2D.velocity.magnitude;
@@ -87,23 +94,24 @@ public class Ball : MonoBehaviour
             Vector2 newDirection = Quaternion.Euler(0, 0, bounceAngle) * Vector2.right;
 
             // Ajusta la velocidad manteniendo la dirección
-            this.rigidbody2D.velocity = newDirection.normalized * GameManagerSingleton.Instance.BallVelocity;
+            this.rigidbody2D.velocity = newDirection.normalized * GameManagerSingleton.Instance.BallManager.BallVelocity;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (GameManagerSingleton.Instance.NumbersOfBalls > 1)
+        if (GameManagerSingleton.Instance.BallManager.Balls.Count > 1)
         {
-            GameManagerSingleton.Instance.SubstractBall();
-            Destroy(this.gameObject);
+            GameManagerSingleton.Instance.BallManager.SubstractBall(this.gameObject);
+            GameManagerSingleton.Instance.DestroyGameObject(this.gameObject);
         } 
         else 
         { 
-            GameManagerSingleton.Instance.SubstractLive();
+            GameManagerSingleton.Instance.Player.SustractLive();
             GameManagerSingleton.Instance.GameStatus = GameStatus.Stop;
             GameManagerSingleton.Instance.BallStatus = BallStatus.WaitingToLaunch;
             this.ResetBallPosition();
+            Debug.Log("GameStatus set STOP");
         }
     }
 
@@ -122,7 +130,7 @@ public class Ball : MonoBehaviour
             Vector3 launchDirection = new Vector3(0.8f, 1, 0).normalized;
 
             // Aplicamos una velocidad a la bola en la dirección calculada
-            this.rigidbody2D.velocity = launchDirection * GameManagerSingleton.Instance.BallVelocity;
+            this.rigidbody2D.velocity = launchDirection * GameManagerSingleton.Instance.BallManager.BallVelocity;
 
             // Ocultamos el mensaje de ayuda para iniciar la partida
             this.startMessage?.SetActive(false);

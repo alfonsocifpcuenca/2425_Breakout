@@ -14,6 +14,10 @@ public static class PowerUpFactory
         {
             return new PowerUpPaddleSize();
         }
+        else if (random < 4)
+        {
+            return new PowerUpAddLive();
+        }
         return null; 
     }
 }

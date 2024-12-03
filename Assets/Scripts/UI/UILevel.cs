@@ -13,6 +13,6 @@ public class UILevel : MonoBehaviour
     private void LateUpdate()
     {
         if (this.text != null)
-            this.text.text = $"NIVEL {GameManagerSingleton.Instance.CurrentLevel}";
+            this.text.text = $"NIVEL {GameManagerSingleton.Instance.LevelManager.CurrentLevel}";
     }
 }

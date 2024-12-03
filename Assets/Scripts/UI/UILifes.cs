@@ -14,6 +14,6 @@ public class UILifes : MonoBehaviour
     private void LateUpdate()
     {
         if (this.text != null)
-            this.text.text = $"VIDAS {GameManagerSingleton.Instance.Lives}";
+            this.text.text = $"VIDAS {GameManagerSingleton.Instance.Player.Lives}";
     }
 }

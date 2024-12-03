@@ -13,6 +13,6 @@ public class UIWin : MonoBehaviour
     private void LateUpdate()
     {
         if (this.text != null)
-            this.text.text = $"¡HAS GANADO CON {GameManagerSingleton.Instance.Points.ToString("N0")} PUNTOS";
+            this.text.text = $"¡HAS GANADO CON {GameManagerSingleton.Instance.Player.Points.ToString("N0")} PUNTOS";
     }
 }

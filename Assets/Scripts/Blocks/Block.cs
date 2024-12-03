@@ -9,6 +9,7 @@ public class Block : MonoBehaviour, IDamagable
     private BlockType type = BlockType.Yellow;
 
 
+    private bool isDestroyed = false;
     private int hits = 0;
     private SpriteRenderer spriteRenderer;
     private Sprite normalSprite;
@@ -18,7 +19,6 @@ public class Block : MonoBehaviour, IDamagable
     private void Awake()
     {
         this.spriteRenderer = GetComponent<SpriteRenderer>();
-        this.powerUp = PowerUpFactory.CreatePowerUp();
     }
 
     public void Config(BlockType blockType)
@@ -37,13 +37,21 @@ public class Block : MonoBehaviour, IDamagable
         this.spriteRenderer.sprite = normalSprite;
     }
 
+    public void SetPowerUp(PowerUp powerUp)
+    {
+        this.powerUp = powerUp;
+    }
+
     public void TakeDamage()
     {
+        if (this.isDestroyed)
+            return;
+
         // Restamos un golpe al bloque
         this.hits++;
 
         // Sumamos los puntos
-        GameManagerSingleton.Instance.AddPoints(pointsPerHit);
+        GameManagerSingleton.Instance.Player.AddPoints(pointsPerHit);
 
         // Cambiamos el sprite en el primer golpe
         if (this.hits == 1)
@@ -54,13 +62,15 @@ public class Block : MonoBehaviour, IDamagable
         // Si los golpes que le quedan son 0 o menor (contemplamos cualquier posible bug), destruimos el objeto
         if (this.hits >= this.hitsToDestroy)
         {
+            this.isDestroyed = true;
             if (this.powerUp != null)
             {
                 this.powerUp.Execute();
             }
-            
+
+            gameObject.SetActive(false);
             Destroy(gameObject);
-            GameManagerSingleton.Instance.SubstractBlock();
+            GameManagerSingleton.Instance.LevelManager.SubstractBlock();
         }        
     }
 }

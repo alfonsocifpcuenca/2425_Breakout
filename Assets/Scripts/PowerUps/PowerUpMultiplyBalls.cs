@@ -1,10 +1,11 @@
+using System.Linq;
 using UnityEngine;
 
 public class PowerUpMultiplyBalls : PowerUp
 {
     public override void Execute()
     {
-        var ball = GameObject.FindGameObjectWithTag("Ball");
+        var ball = GameManagerSingleton.Instance.BallManager.Balls.FirstOrDefault();
         if (ball == null) 
             return;
 
@@ -13,22 +14,14 @@ public class PowerUpMultiplyBalls : PowerUp
             return;
 
         // Crear bolas adicionales
-        for (int i = GameManagerSingleton.Instance.NumbersOfBalls; i < 3; i++)
+        int actualBalls = GameManagerSingleton.Instance.BallManager.Balls.Count;
+        for (int i = actualBalls; i < 3; i++)
         {
-            if (GameManagerSingleton.Instance.NumbersOfBalls > 2)
-                return;
-
-            GameManagerSingleton.Instance.AddBall();
-
+            // Crear bolas adicionales
             GameObject newBall = Object.Instantiate(ball, ball.transform.position, Quaternion.identity);
-
-            // Aplicar una velocidad ligeramente diferente
             Rigidbody2D newRb = newBall.GetComponent<Rigidbody2D>();
-            if (newRb != null)
-            {
-                float angle = Random.Range(-30f, 30f); // Variar ángulo en un rango
-                newRb.velocity = Quaternion.Euler(0, 0, angle) * originalRb.velocity;
-            }
+            float angle = Random.Range(-30f, 30f); // Variar ángulo en un rango
+            newRb.velocity = Quaternion.Euler(0, 0, angle) * ball.GetComponent<Rigidbody2D>().velocity;
         }
     }
 }

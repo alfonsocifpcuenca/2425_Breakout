@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,34 +5,42 @@ public class SceneMainManager : MonoBehaviour
 {
 
     bool locked = false;
+
+    private void Awake()
+    {
+        GameManagerSingleton.Instance.Player = new Player();
+        GameManagerSingleton.Instance.BallManager = new BallManager();
+        GameManagerSingleton.Instance.LevelManager = new LevelManager();
+    }
+
     void Update()
     {
         if (locked)
-            return;
+            return;       
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             locked = true;
-            GameManagerSingleton.Instance.BallVelocity = 4f;
-            GameManagerSingleton.Instance.Lives = 5;
+            GameManagerSingleton.Instance.BallManager.BallVelocity = 4f;
+            GameManagerSingleton.Instance.Player.SetLives(5);
             GameManagerSingleton.Instance.GameStatus = GameStatus.Playing;
-            SceneManager.LoadScene("SceneOne");
+            SceneManager.LoadScene(SceneName.ScenePlay.ToString());
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             locked = true;
-            GameManagerSingleton.Instance.BallVelocity = 8f;
-            GameManagerSingleton.Instance.Lives = 3;
+            GameManagerSingleton.Instance.BallManager.BallVelocity = 8f;
+            GameManagerSingleton.Instance.Player.SetLives(3);
             GameManagerSingleton.Instance.GameStatus = GameStatus.Playing;
-            SceneManager.LoadScene("SceneOne");
+            SceneManager.LoadScene(SceneName.ScenePlay.ToString());
         } 
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             locked = true;
-            GameManagerSingleton.Instance.BallVelocity = 10f;
-            GameManagerSingleton.Instance.Lives = 1;
+            GameManagerSingleton.Instance.BallManager.BallVelocity = 10f;
+            GameManagerSingleton.Instance.Player.SetLives(1);
             GameManagerSingleton.Instance.GameStatus = GameStatus.Playing;
-            SceneManager.LoadScene("SceneOne");
+            SceneManager.LoadScene(SceneName.ScenePlay.ToString());
         }
     }
 }
