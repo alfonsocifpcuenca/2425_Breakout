@@ -2,7 +2,7 @@
 {
     public override void Execute()
     {
-        GameManagerSingleton.Instance.AddLive();
+        GameManagerSingleton.Instance.Player.AddLive();
     }
 }
 

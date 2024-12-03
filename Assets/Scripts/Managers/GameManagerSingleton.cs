@@ -36,7 +36,10 @@ public class GameManagerSingleton : MonoBehaviour
     #region HelperMethods
     public void DestroyGameObject(GameObject go)
     {
+        // Descativamos el objeto
         go.SetActive(false);
+
+        // Marcamos el objeto para destruir al final del frame
         Destroy(go);
     }
 

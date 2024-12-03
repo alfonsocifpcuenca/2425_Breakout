@@ -1,5 +1,3 @@
-using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -9,16 +7,15 @@ public class Block : MonoBehaviour, IDamagable
     private int hitsToDestroy = 1;
     private int pointsPerHit = 50;
     private BlockType type = BlockType.Yellow;
-    
+
 
     private bool isDestroyed = false;
     private int hits = 0;
-    private bool isDestroyed = false;
     private SpriteRenderer spriteRenderer;
     private Sprite normalSprite;
     private Sprite brokenSprite;
     private PowerUp powerUp;
-    
+
     private void Awake()
     {
         this.spriteRenderer = GetComponent<SpriteRenderer>();
@@ -65,12 +62,15 @@ public class Block : MonoBehaviour, IDamagable
         // Si los golpes que le quedan son 0 o menor (contemplamos cualquier posible bug), destruimos el objeto
         if (this.hits >= this.hitsToDestroy)
         {
+            this.isDestroyed = true;
+
             if (this.powerUp != null)
                 this.powerUp.Execute();
-            }
             
+            this.gameObject.SetActive(false);
             Destroy(gameObject);
-            GameManagerSingleton.Instance.SubstractBlock();
-        }        
+            GameManagerSingleton.Instance.LevelManager.SubstractBlock();
+        }
     }
 }
+
