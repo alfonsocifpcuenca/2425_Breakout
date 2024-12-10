@@ -6,24 +6,34 @@ using UnityEngine.Video;
 
 public class LevelManager
 {
+    // Variable para almacenar el nivel actual
     private int currentlevel = 1;
+
+    // Variable para almacenar los bloques que faltan para acabar el nivel
     private int blocksLeft = 0;
     
+    // Propiedad para obtener el nivel actual
     public int CurrentLevel { get { return currentlevel; } set { } }
+
+    // Propiedad para obtener el número de bloques que quedan para acabar el nivel
     public int BlocksLeft { get { return blocksLeft; } }
         
+    // Variable para almacenar el contenedor donde se ubicarán los bloques
     private GameObject blockContainer;
+    // Variabla para almacenar el prefab de los bloques
     private GameObject blockPrefab;
+
+    // Variables para controlar las dimensiones de los bloques
     private float blockWidth = 3.84f;
     private float blockHeight = 1.28f;
 
-    public LevelManager()
-    {
-
-    }
-
+    /// <summary>
+    /// Método que para destruir un bloque
+    /// </summary>
     public void SubstractBlock()
     {
+
+
         this.blocksLeft--;
 
         // Si nos pasamos el nivel
