@@ -18,11 +18,13 @@ public class Player
     public void AddLive()
     {
         this.lives++;
+        GameManagerSingleton.Instance.EventManager.OnLiveAdded.Invoke();
     }
 
     public void SustractLive()
     {
         this.lives--;
+        GameManagerSingleton.Instance.EventManager.OnLiveLost.Invoke();
 
         if (this.lives == 0)
             SceneManager.LoadScene(SceneName.SceneGameOver.ToString());
@@ -31,11 +33,13 @@ public class Player
     public void SetLives(int lives)
     {
         this.lives = lives;
+        GameManagerSingleton.Instance.EventManager.OnLivesChanged.Invoke();
     }
 
     public void AddPoints(int points)
     {
         this.points += points;
+        GameManagerSingleton.Instance.EventManager.OnPointsAdded.Invoke();
     }
 
 }

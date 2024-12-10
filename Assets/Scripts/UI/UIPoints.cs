@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Text))]
 public class UIPoints : MonoBehaviour
 {
     private Text text;
@@ -8,11 +9,16 @@ public class UIPoints : MonoBehaviour
     void Start()
     {
         this.text = GetComponent<Text>();
+        // Actualizamos el texto por primera vez
+        this.TextUpdate();
+
+        // Nos suscribimos al evento OnPointsAdded para actualizar el texto en la UI
+        GameManagerSingleton.Instance.EventManager.OnPointsAdded.AddListener(TextUpdate);
     }
 
-    private void LateUpdate()
+    private void TextUpdate()
     {
-        if (this.text != null)
-            this.text.text = $"PUNTOS {GameManagerSingleton.Instance.Player.Points.ToString("N0")}";
+        // Actualizamos el texto con los puntos del GameManager
+        this.text.text = $"PUNTOS {GameManagerSingleton.Instance.Player.Points.ToString("N0")}";
     }
 }
