@@ -8,10 +8,8 @@ public class EventManager
     public UnityEvent OnLiveLost = new UnityEvent();
     // Evento cuando se establecen las vidas
     public UnityEvent OnLivesChanged = new UnityEvent();
-
     // Evento cuando se añaden puntos
     public UnityEvent OnPointsAdded = new UnityEvent();
-    
     // Evento cuando se cambia de nivel
     public UnityEvent OnLevelChanged = new UnityEvent();
 }

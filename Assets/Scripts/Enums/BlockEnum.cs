@@ -1,3 +1,6 @@
+/// <summary>
+/// Enumerado para establecer el tipo de bloque 
+/// </summary>
 public enum BlockType
 { 
     Yellow = 1,

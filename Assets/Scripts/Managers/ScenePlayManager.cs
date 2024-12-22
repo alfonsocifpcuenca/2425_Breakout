@@ -1,7 +1,8 @@
-using System.Net.Sockets;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Manager para la escena Play, donde gestionamos el pause
+/// </summary>
 public class ScenePlayManager : MonoBehaviour
 {
     [SerializeField]

@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Manager para la escena Win
+/// </summary>
 public class SceneWinManager : MonoBehaviour
 {
 

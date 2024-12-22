@@ -100,18 +100,21 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (GameManagerSingleton.Instance.BallManager.Balls.Count > 1)
+        if (collision.gameObject.CompareTag("KillZone"))
         {
-            GameManagerSingleton.Instance.BallManager.SubstractBall(this.gameObject);
-            GameManagerSingleton.Instance.DestroyGameObject(this.gameObject);
-        } 
-        else 
-        { 
-            GameManagerSingleton.Instance.Player.SustractLive();
-            GameManagerSingleton.Instance.GameStatus = GameStatus.Stop;
-            GameManagerSingleton.Instance.BallStatus = BallStatus.WaitingToLaunch;
-            this.ResetBallPosition();
-            Debug.Log("GameStatus set STOP");
+            if (GameManagerSingleton.Instance.BallManager.Balls.Count > 1)
+            {
+                GameManagerSingleton.Instance.BallManager.SubstractBall(this.gameObject);
+                GameManagerSingleton.Instance.DestroyGameObject(this.gameObject);
+            }
+            else
+            {
+                GameManagerSingleton.Instance.Player.SustractLive();
+                GameManagerSingleton.Instance.GameStatus = GameStatus.Stop;
+                GameManagerSingleton.Instance.BallStatus = BallStatus.WaitingToLaunch;
+                this.ResetBallPosition();
+                Debug.Log("GameStatus set STOP");
+            }
         }
     }
 

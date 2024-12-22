@@ -28,28 +28,33 @@ public class LevelManager
     private float blockHeight = 1.28f;
 
     /// <summary>
-    /// Método que para destruir un bloque
+    /// Método que para restar un bloque
     /// </summary>
-    public void SubstractBlock()
+    public int SubstractBlock()
     {
-
-
         this.blocksLeft--;
-
-        // Si nos pasamos el nivel
-        if (this.blocksLeft <= 0)
-        {
-            // Reseteamos el juego
-            this.ResetLevel();
-
-            // Aumentamos el nivel
-            this.currentlevel++;
-
-            // Cargamos el nivel nuevo
-            this.LoadLevel();
-        }
+        return blocksLeft;
     }
 
+    /// <summary>
+    /// Método para cambiar de nivel
+    /// </summary>
+    public void ChangeLevel()
+    {
+        // Reseteamos el juego
+        this.ResetLevel();
+
+        // Aumentamos el nivel
+        this.currentlevel++;
+        GameManagerSingleton.Instance.EventManager.OnLevelChanged.Invoke();
+
+        // Cargamos el nivel nuevo
+        this.LoadLevel();
+    }
+
+    /// <summary>
+    /// Método para cargar un nuevo nivel
+    /// </summary>
     public void LoadLevel()
     {
         // Cargamos el nuevo nivel
@@ -71,20 +76,31 @@ public class LevelManager
         this.CreateLevel(levelData);
     }
 
+    /// <summary>
+    /// Método para limpiar un nivel
+    /// </summary>
+    /// <param name="blockContainer"></param>
     private void ClearLevel(GameObject blockContainer)
     {    
+        // Obtenemos todos los hijos del block container y los eliminamos, así nos aseguramos
+        // que la pantalla queda limpia entre niveles
         for (int i = blockContainer.transform.childCount - 1; i >= 0; i--)
         {
             GameObject go = blockContainer.transform.GetChild(i).gameObject;
-
-            // Desactivamos para ocultar
             GameManagerSingleton.Instance.DestroyGameObject(go);            
         }
     }
 
+    /// <summary>
+    ///  Método que crea un nivel
+    /// </summary>
+    /// <param name="levelData"></param>
     private void CreateLevel(Level levelData)
     {
+        // Buscamos el block container si no lo tenemos localizado previamente
         this.blockContainer = this.blockContainer ?? GameObject.Find("BlocksContainer");
+        
+        // Cargamos el prefab del bloque si no lo tenemos cargado previamente
         this.blockPrefab = this.blockPrefab ?? Resources.Load<GameObject>("Prefabs/Block");
 
         // Borramos todos los bloques
@@ -137,7 +153,7 @@ public class LevelManager
             foreach (Block block in selectedBlocks)
             {
                 // Generar un potenciador y asociarlo al bloque
-                PowerUp powerUp;
+                GameObject powerUp;
                 do
                 {
                     powerUp = PowerUpFactory.CreatePowerUp();
@@ -145,10 +161,11 @@ public class LevelManager
                 } while (powerUp == null);
             }
         }
-
-        Debug.Log($"Hay {blocksLeft} bloques en el nivel {currentlevel}");
     }
 
+    /// <summary>
+    /// Método para resetear un nivel
+    /// </summary>
     private void ResetLevel()
     {
         // Eliminamos todas las bolas excepto 1, cualquiera

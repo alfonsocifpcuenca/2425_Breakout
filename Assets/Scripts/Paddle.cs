@@ -12,11 +12,24 @@ public class Paddle : MonoBehaviour
     private float paddleRightLimit;
     public Vector3 OriginalScale { get; private set; }
 
+    private float initialSpeed = 8f;
+    private float speed = 8f;
+
     private void Awake()
     {
         GameManagerSingleton.Instance.LevelManager.LoadLevel();
         this.CalculatePaddleLimits();
         this.OriginalScale = transform.localScale;
+    }
+
+    private void Start()
+    {
+        GameManagerSingleton.Instance.EventManager.OnLevelChanged.AddListener(Reset);
+    }
+
+    void Update()
+    {
+        MovePaddle();
     }
 
     public void CalculatePaddleLimits()
@@ -50,11 +63,6 @@ public class Paddle : MonoBehaviour
             Debug.LogError("One or more required SpriteRenderers are missing.");
         }
     }
-
-    void Update()
-    {
-        MovePaddle();
-    }
     
     private void MovePaddle()
     {
@@ -68,7 +76,7 @@ public class Paddle : MonoBehaviour
         float currentXPosition = this.transform.position.x;
         
         // Calculamos la nueva posicion de la pala
-        float newXPosition = moveInput * GameManagerSingleton.Instance.BallManager.BallVelocity * Time.deltaTime + currentXPosition;
+        float newXPosition = moveInput * this.speed * Time.deltaTime + currentXPosition;
 
         // Acotamos el valor para no exceder los límites
         newXPosition = Mathf.Clamp(newXPosition, this.paddleLeftLimit, this.paddleRightLimit);
@@ -76,5 +84,16 @@ public class Paddle : MonoBehaviour
         // Establecemos la nueva posición a la pala
         Vector3 newPosition = new Vector3(newXPosition, this.transform.position.y, this.transform.position.z);
         this.transform.position = newPosition;
+    }
+
+    public void IncreaseSpeed()
+    {
+        this.speed++;
+    }
+
+    public void Reset()
+    {
+        this.speed = this.initialSpeed;
+        this.transform.localScale = this.OriginalScale;
     }
 }

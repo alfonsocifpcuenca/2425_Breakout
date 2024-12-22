@@ -51,7 +51,7 @@ public class GameManagerSingleton : MonoBehaviour
 
     #region HelperMethods
     /// <summary>
-    /// Desactivamos un objeto y lo destruimos
+    /// Método para destruir un objeto (lo desactiva previamente)
     /// </summary>
     /// <param name="go"></param>
     public void DestroyGameObject(GameObject go)
@@ -64,7 +64,7 @@ public class GameManagerSingleton : MonoBehaviour
     }
 
     /// <summary>
-    /// Creamos un gameobject
+    /// Método para crear un gameobject en la escena
     /// </summary>
     /// <param name="originalGo"></param>
     /// <param name="parentTransform"></param>

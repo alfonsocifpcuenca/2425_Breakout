@@ -14,7 +14,7 @@ public class Block : MonoBehaviour, IDamagable
     private SpriteRenderer spriteRenderer;
     private Sprite normalSprite;
     private Sprite brokenSprite;
-    private PowerUp powerUp;
+    private GameObject powerUpPrefab;
 
     private void Awake()
     {
@@ -37,9 +37,9 @@ public class Block : MonoBehaviour, IDamagable
         this.spriteRenderer.sprite = normalSprite;
     }
 
-    public void SetPowerUp(PowerUp powerUp)
+    public void SetPowerUp(GameObject powerUp)
     {
-        this.powerUp = powerUp;
+        this.powerUpPrefab = powerUp;
     }
 
     public void TakeDamage()
@@ -63,12 +63,15 @@ public class Block : MonoBehaviour, IDamagable
         if (this.hits >= this.hitsToDestroy)
         {
             this.isDestroyed = true;
+            int blocksLeft = GameManagerSingleton.Instance.LevelManager.SubstractBlock();
 
-            if (this.powerUp != null)
-                this.powerUp.Execute();
-            
+            if (this.powerUpPrefab != null && blocksLeft > 1)
+                Instantiate(this.powerUpPrefab, this.transform.position, Quaternion.identity);
+
             Destroy(gameObject);
-            GameManagerSingleton.Instance.LevelManager.SubstractBlock();
+            if (blocksLeft <= 0)
+                GameManagerSingleton.Instance.LevelManager.ChangeLevel();
+
         }
     }
 }

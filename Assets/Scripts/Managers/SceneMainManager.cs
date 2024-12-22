@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Manager para la escena Main
+/// </summary>
 public class SceneMainManager : MonoBehaviour
 {
 
